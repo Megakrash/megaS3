@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
+import { expressMiddlewares } from "./routes";
 
 const app = express();
 const port = process.env.APP_PORT || 5005;
@@ -15,7 +16,7 @@ app.use(
   "/pictures",
   express.static(path.join(__dirname, "../public/pictures"))
 );
-
+expressMiddlewares(app);
 app.get("/", (req, res) => {
   res.send("Bienvenue sur MegaS3!");
 });
