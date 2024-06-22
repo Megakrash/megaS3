@@ -8,7 +8,7 @@ RUN npm i
 FROM node:18.18.2-alpine3.18 AS dev
 WORKDIR /app
 COPY package.json .
-COPY --from=deps /app/node_modules node_modules 
+COPY --from=deps /app/node_modules node_modules
 COPY public public
 COPY src src
 COPY tsconfig.json tsconfig.json
@@ -19,6 +19,7 @@ FROM node:18.18.2-alpine3.18 AS build
 WORKDIR /app
 COPY package.json .
 COPY --from=deps /app/node_modules node_modules 
+RUN mkdir -p public
 COPY public public
 COPY . .
 RUN npm run build
