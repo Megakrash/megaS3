@@ -1,5 +1,6 @@
 import { Express, Request, Response } from "express";
 import { uploadPicture } from "./services/multer.services";
+import { deletePicture } from "./services/deletePicture.services";
 
 export function expressMiddlewares(app: Express) {
   app.post(
@@ -18,4 +19,20 @@ export function expressMiddlewares(app: Express) {
       }
     }
   );
+  app.delete("/delete/:filename", async (req: Request, res: Response) => {
+    if (req.params.filename) {
+      try {
+        const fileDeleted = await deletePicture(req.params.filename);
+        if (fileDeleted) {
+          res.json({ success: true, filename: fileDeleted });
+        } else {
+          res.status(404).send("File not found");
+        }
+      } catch (error) {
+        res.status(500).send("Error removing picture");
+      }
+    } else {
+      res.status(400).send("Filename is required");
+    }
+  });
 }
