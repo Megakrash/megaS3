@@ -19,7 +19,6 @@ FROM node:18.18.2-alpine3.18 AS build
 WORKDIR /app
 COPY package.json .
 COPY --from=deps /app/node_modules node_modules 
-RUN mkdir -p public
 COPY public public
 COPY . .
 RUN npm run build
