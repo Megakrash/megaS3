@@ -11,8 +11,8 @@ services:
       - ./public:/app/public
     env_file: .env
     networks:
-      - megaS3-network
+      - mega-S3-network
 volumes:
   assets: {}
 networks:
-  megaS3-network: {}
+  mega-S3-network: {}
