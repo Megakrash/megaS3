@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
+import { expressMiddlewares } from "./routes";
 
 const app = express();
 const port = process.env.APP_PORT || 5005;
@@ -40,7 +41,7 @@ app.use(
 app.get("/", (req, res) => {
   res.send("Bienvenue sur Mega-S3!");
 });
-
+expressMiddlewares(app);
 app.listen(port, () => {
   console.log(`🚀 Server ready at port ${port} 🚀`);
 });
