@@ -1,5 +1,5 @@
 import express from "express";
-import cors, { CorsOptions } from "cors";
+import cors from "cors";
 import path from "path";
 import { expressMiddlewares } from "./routes";
 
@@ -10,25 +10,6 @@ const allowedOrigins = [
   process.env.TGC_RELEASE_URL || "https://release-tgc.megakrash.fr",
   process.env.TGC_PROD_URL || "https://tgc.megakrash.fr",
 ];
-
-const corsOptions: CorsOptions = {
-  origin: (
-    origin: string | undefined,
-    callback: (err: Error | null, allow?: boolean) => void
-  ) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  optionsSuccessStatus: 200,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-};
-app.use(cors(corsOptions));
-app.use(express.json({ limit: "50mb" }));
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
@@ -47,13 +28,33 @@ app.use((req, res, next) => {
   next();
 });
 
-app.options("*", cors(corsOptions));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
+
+app.use(express.json({ limit: "50mb" }));
+
+app.options("*", cors());
 
 app.use(
   "/pictures",
   express.static(path.join(__dirname, "../public/pictures"))
 );
+
 expressMiddlewares(app);
+
 app.get("/", (req, res) => {
   res.send("Bienvenue sur Mega-S3!");
 });
