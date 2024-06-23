@@ -25,8 +25,21 @@ const corsOptions: CorsOptions = {
   optionsSuccessStatus: 200,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
 app.options("*", cors(corsOptions));
+app.use((req, res, next) => {
+  console.log("Request origin:", req.headers.origin);
+  console.log("Allowed origins:", allowedOrigins);
+  res.header("Access-Control-Allow-Origin", allowedOrigins.join(","));
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  next();
+});
+
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "50mb" }));
 
