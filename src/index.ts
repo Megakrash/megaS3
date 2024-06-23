@@ -27,21 +27,27 @@ const corsOptions: CorsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
-app.options("*", cors(corsOptions));
+app.use(cors(corsOptions));
+app.use(express.json({ limit: "50mb" }));
+
 app.use((req, res, next) => {
-  console.log("Request origin:", req.headers.origin);
-  console.log("Allowed origins:", allowedOrigins);
-  res.header("Access-Control-Allow-Origin", allowedOrigins.join(","));
-  res.header(
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
 });
 
-app.use(cors(corsOptions));
-app.use(express.json({ limit: "50mb" }));
+app.options("*", cors(corsOptions));
 
 app.use(
   "/pictures",
