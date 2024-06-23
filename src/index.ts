@@ -23,19 +23,11 @@ const corsOptions: CorsOptions = {
     }
   },
   optionsSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "50mb" }));
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", allowedOrigins.join(","));
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  next();
-});
 
 app.use(
   "/pictures",
@@ -43,7 +35,7 @@ app.use(
 );
 expressMiddlewares(app);
 app.get("/", (req, res) => {
-  res.send("Bienvenue sur MegaS3!");
+  res.send("Bienvenue sur Mega-S3!");
 });
 
 app.listen(port, () => {
