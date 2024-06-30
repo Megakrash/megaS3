@@ -3,6 +3,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import sharp from "sharp";
+import { copyFile } from "../utils/copyFile";
 
 const tempStoragePath = "./public/temp";
 const finalStoragePath = "./public/pictures";
@@ -52,7 +53,7 @@ export const processImage = async (
           .resize(1280, 1280, { fit: "contain" })
           .toFile(finalFilePath);
       } else {
-        await fs.promises.rename(tempFilePath, finalFilePath);
+        await copyFile(tempFilePath, finalFilePath);
       }
 
       // Delete the temp file
