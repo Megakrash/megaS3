@@ -6,8 +6,13 @@ import { expressMiddlewares } from "./routes";
 const app = express();
 const port = process.env.APP_PORT || 5005;
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "http://localhost:3000",
+  process.env.TGC_RELEASE_URL || "http://localhost:3000",
+  process.env.TGC_PROD_URL || "http://localhost:3000",
+];
 const corsOptions = {
-  origin: "*",
+  origin: allowedOrigins,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
