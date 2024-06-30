@@ -3,3 +3,4 @@ node_modules
 pictures
 docker-compose.prod.yml
 nginx.conf
+temp

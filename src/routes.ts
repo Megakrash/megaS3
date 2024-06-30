@@ -1,8 +1,11 @@
 import { Express, Request, Response } from "express";
 import cors from "cors";
 import { corsOptions } from "./corsConfig";
-import { uploadPicture } from "./services/multer.services";
-import { deletePicture } from "./services/deletePicture.services";
+import {
+  processImage,
+  uploadPicture,
+} from "./services/picture.upload.services";
+import { deletePicture } from "./services/picture.delete.services";
 
 export function middlewares(app: Express) {
   app.post(
@@ -10,16 +13,7 @@ export function middlewares(app: Express) {
     cors(corsOptions),
     uploadPicture.single("file"),
     async (req: Request, res: Response) => {
-      if (req.file) {
-        try {
-          const pictureData = { filename: req.file.filename };
-          res.json(pictureData);
-        } catch (error) {
-          res.status(500).send("Error saving picture");
-        }
-      } else {
-        res.status(400).send("No file was uploaded.");
-      }
+      await processImage(req, res);
     }
   );
   app.delete("/delete/:filename", async (req: Request, res: Response) => {
