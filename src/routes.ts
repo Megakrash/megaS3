@@ -1,10 +1,13 @@
 import { Express, Request, Response } from "express";
+import cors from "cors";
+import { corsOptions } from "./corsConfig";
 import { uploadPicture } from "./services/multer.services";
 import { deletePicture } from "./services/deletePicture.services";
 
-export function expressMiddlewares(app: Express) {
+export function middlewares(app: Express) {
   app.post(
     "/pictures",
+    cors(corsOptions),
     uploadPicture.single("file"),
     async (req: Request, res: Response) => {
       if (req.file) {

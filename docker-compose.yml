@@ -1,0 +1,18 @@
+services:
+  mega-s3:
+    build:
+      context: .
+      target: dev
+    container_name: megaS3
+    ports:
+      - 5005:5005
+    volumes:
+      - ./src/:/app/src/
+      - ./public:/app/public
+    env_file: .env
+    networks:
+      - mega-S3-network
+volumes:
+  assets: {}
+networks:
+  mega-S3-network: {}
