@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import sharp from "sharp";
 import { copyFile } from "../utils/copyFile";
+import { v4 as uuidv4 } from "uuid";
 
 const tempStoragePath = "./public/temp";
 const finalStoragePath = "./public/pictures";
@@ -37,9 +38,7 @@ export const processImage = async (
     try {
       const tempFilePath = path.join(tempStoragePath, req.file.originalname);
       const ext = path.extname(req.file.originalname);
-      const newFilename = `${Date.now()}-${Math.floor(
-        Math.random() * 8999 + 1000
-      )}${ext}`;
+      const newFilename = `${Date.now()}-${uuidv4()}${ext}`;
       const finalFilePath = path.join(finalStoragePath, newFilename);
 
       const image = sharp(tempFilePath);
